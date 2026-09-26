@@ -1,14 +1,15 @@
 # Laboratório Full Stack — Trilha
 
-Você vai construir um sistema de eventos ao longo de quatro atividades para casa. Cada atualização acrescenta material ao **mesmo projeto**. A atividade atual é [Checkpoint 03 — Integrar API e banco](docs/checkpoint-03.md).
+Você vai construir um sistema de eventos ao longo de quatro atividades para casa. Cada atualização acrescenta material ao **mesmo projeto**. A atividade atual é [Checkpoint 04 — Inscrever pela interface](docs/checkpoint-04.md).
 
 ## O que precisa instalar
 
 - Python 3.11 ou superior
+- Node.js 22.12 ou superior, com npm
 - Git
 - Uma conta no GitHub
 
-Node.js será necessário quando o frontend chegar. O SQLite é criado pelo projeto: não há servidor de banco para instalar.
+O SQLite é criado pelo projeto: não há servidor de banco para instalar.
 
 ## Primeiro acesso
 
@@ -49,7 +50,7 @@ Com o ambiente ativado, execute os testes:
 python scripts/check.py
 ```
 
-Os testes de criação começarem vermelhos é esperado. Eles descrevem o que falta implementar. Ao terminar a atividade, todos devem passar.
+Os testes da etapa atual começarem vermelhos é esperado. Eles descrevem o que falta implementar. Ao terminar a atividade, todos devem passar.
 
 Para iniciar a API:
 
@@ -68,6 +69,22 @@ python -m database.seed
 ```
 
 O arquivo `events.db` é local e não entra nos commits. O usuário de demonstração tem ID `1`. No checkpoint 3, a API passa a usar esse mesmo arquivo quando você inicia o servidor.
+
+## Preparar e abrir a interface
+
+Instale as dependências de JavaScript uma vez:
+
+```bash
+npm ci --prefix frontend
+```
+
+Depois de completar os checkpoints anteriores, rode `python -m database.seed` para ter evento e usuários de demonstração. Em um terminal, com o ambiente Python ativado, execute `python -m uvicorn app.main:app --reload`. Em outro terminal, execute:
+
+```bash
+npm run dev --prefix frontend
+```
+
+Abra `http://127.0.0.1:5173`. A interface envia `/api/...` ao servidor Vite, que repassa à FastAPI em `127.0.0.1:8000`. Os usuários de demonstração têm IDs `1` e `2`; escolher um deles não é autenticação. Depois de instalar npm, `python scripts/check.py` roda os testes Python e React. Para testar só a interface, use `npm test --prefix frontend -- --run`.
 
 ## Sua rotina em cada checkpoint
 
