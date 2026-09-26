@@ -15,7 +15,7 @@ test('mostra carregamento e depois os eventos recebidos da API', async () => {
   vi.stubGlobal('fetch', vi.fn(() => new Promise(resolve => { finish = resolve })))
   render(<App />)
   expect(screen.getByText(/carregando/i)).toBeInTheDocument()
-  expect(fetch).toHaveBeenCalledWith('/api/events')
+  expect(fetch.mock.calls[0][0]).toBe('/api/events')
   finish(response([event]))
   expect(await screen.findByText('Oficina de Web')).toBeInTheDocument()
   expect(screen.getByText(/2 vagas/i)).toBeInTheDocument()
@@ -40,15 +40,16 @@ test('inscreve o usuário, bloqueia clique repetido e atualiza vagas pelo servid
   vi.stubGlobal('fetch', fetchMock)
   render(<App />)
   const button = await screen.findByRole('button', { name: /inscrever/i })
+  fireEvent.change(screen.getByLabelText(/participante de demonstração/i), { target: { value: '2' } })
   fireEvent.click(button)
   expect(button).toBeDisabled()
   expect(fetchMock).toHaveBeenCalledTimes(2)
   expect(fetchMock).toHaveBeenNthCalledWith(2, '/api/events/1/registrations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user_id: 1 }),
+    body: JSON.stringify({ user_id: 2 }),
   })
-  finishRegistration(response({ event_id: 1, user_id: 1 }))
+  finishRegistration(response({ event_id: 1, user_id: 2 }))
   expect(await screen.findByText(/1 vaga disponível/i)).toBeInTheDocument()
   expect(screen.getByRole('status')).toHaveTextContent(/inscrição realizada/i)
   expect(fetchMock).toHaveBeenCalledTimes(3)
