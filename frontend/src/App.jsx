@@ -1,11 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { listEvents, register } from './api.js'
 
-// Esta tela já tem a estrutura visual. Sua tarefa é ligá-la à API e ao estado React.
-// Consulte docs/checkpoint-04.md antes de substituir os dados de exemplo.
 export default function App() {
   const [userId, setUserId] = useState(1)
-  const example = { id: 0, title: 'Exemplo de evento', date: '2026-10-10', available_slots: 2 }
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [busyId, setBusyId] = useState(null)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    listEvents()
+      .then(setEvents)
+      .catch(() => setError('Não foi possível carregar os eventos.'))
+      .finally(() => setLoading(false))
+  }, [])
+
+  async function handleRegistration(eventId) {
+    if (busyId !== null) return
+    setBusyId(eventId)
+    setError('')
+    setMessage('')
+    try {
+      await register(eventId, userId)
+      setEvents(await listEvents())
+      setMessage('Inscrição realizada com sucesso.')
+    } catch (problem) {
+      setError(problem.message)
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   return <main className="page">
     <header>
@@ -21,13 +46,19 @@ export default function App() {
       </select>
     </label>
 
+    {loading && <p>Carregando eventos...</p>}
+    {error && <p role="alert">{error}</p>}
+    {message && <p role="status">{message}</p>}
+    {!loading && !error && events.length === 0 && <p>Nenhum evento disponível.</p>}
     <section aria-label="Lista de eventos" className="events">
-      <article className="card">
-        <p className="date">{example.date}</p>
-        <h2>{example.title}</h2>
-        <p>{example.available_slots} vagas disponíveis</p>
-        <button type="button">Inscrever-se</button>
-      </article>
+      {events.map(event => <article className="card" key={event.id}>
+        <p className="date">{event.date}</p>
+        <h2>{event.title}</h2>
+        <p>{event.available_slots} {event.available_slots === 1 ? 'vaga disponível' : 'vagas disponíveis'}</p>
+        <button type="button" disabled={busyId !== null || event.available_slots === 0} onClick={() => handleRegistration(event.id)}>
+          Inscrever-se
+        </button>
+      </article>)}
     </section>
   </main>
 }
