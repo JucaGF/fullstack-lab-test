@@ -1,5 +1,7 @@
 # Laboratório Full Stack — Trilha
 
+> Cópia temporária para revisão: comece pelo [guia de revisão](REVIEW.md).
+
 Você vai construir um sistema de eventos ao longo de quatro atividades para casa. Cada atualização acrescenta material ao **mesmo projeto**. A atividade atual é [Checkpoint 04 — Inscrever pela interface](docs/checkpoint-04.md).
 
 ## O que precisa instalar
