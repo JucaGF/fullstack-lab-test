@@ -6,6 +6,7 @@ Você vai construir um sistema de eventos ao longo de quatro atividades para cas
 
 - Python 3.11 ou superior
 - Node.js 22.12 ou superior, com npm
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) para instalar e executar as dependências Python
 - Git
 - Uma conta no GitHub
 
@@ -28,34 +29,21 @@ Substitua `<url-do-seu-fork>` pelo endereço mostrado no GitHub. A `main` do seu
 
 ## Preparar Python
 
-No macOS ou Linux:
+Após instalar o uv, na raiz do projeto execute:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements-test.txt
+uv sync --locked
+uv run --locked python scripts/check.py
 ```
 
-No Windows (PowerShell):
-
-```powershell
-py -3 -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-test.txt
-```
-
-Com o ambiente ativado, execute os testes:
-
-```bash
-python scripts/check.py
-```
+O uv cria `.venv` e instala as versões registradas em `uv.lock`. Não é preciso ativar o ambiente virtual. Use esses mesmos comandos no macOS, Linux ou Windows.
 
 É esperado que os testes da etapa atual comecem vermelhos. Eles descrevem o que falta implementar. Ao terminar a atividade, todos devem passar.
 
 Para iniciar a API:
 
 ```bash
-python -m uvicorn app.main:app --reload
+uv run --locked python -m uvicorn app.main:app --reload
 ```
 
 Abra `http://127.0.0.1:8000/docs` para testar as rotas pelo navegador. Pare o servidor com `Ctrl+C`.
@@ -65,7 +53,7 @@ Abra `http://127.0.0.1:8000/docs` para testar as rotas pelo navegador. Pare o se
 A partir do checkpoint 2, o projeto inclui um banco SQLite. Depois de completar os modelos, crie os dados de demonstração com:
 
 ```bash
-python -m database.seed
+uv run --locked python -m database.seed
 ```
 
 O arquivo `events.db` é local e não entra nos commits. O usuário de demonstração tem ID `1`. No checkpoint 3, a API passa a usar esse mesmo arquivo quando você inicia o servidor.
@@ -78,18 +66,18 @@ Instale as dependências de JavaScript uma vez:
 npm ci --prefix frontend
 ```
 
-Depois de completar os checkpoints anteriores, rode `python -m database.seed` para ter evento e usuários de demonstração. Em um terminal, com o ambiente Python ativado, execute `python -m uvicorn app.main:app --reload`. Em outro terminal, execute:
+Depois de completar os checkpoints anteriores, rode `uv run --locked python -m database.seed` para ter evento e usuários de demonstração. Em um terminal, execute `uv run --locked python -m uvicorn app.main:app --reload`. Em outro terminal, execute:
 
 ```bash
 npm run dev --prefix frontend
 ```
 
-Abra `http://127.0.0.1:5173`. A interface envia `/api/...` ao servidor Vite, que repassa à FastAPI em `127.0.0.1:8000`. Os usuários de demonstração têm IDs `1` e `2`; escolher um deles não é autenticação. Depois de instalar npm, `python scripts/check.py` roda os testes Python e React. Para testar só a interface, use `npm test --prefix frontend -- --run`.
+Abra `http://127.0.0.1:5173`. A interface envia `/api/...` ao servidor Vite, que repassa à FastAPI em `127.0.0.1:8000`. Os usuários de demonstração têm IDs `1` e `2`; escolher um deles não é autenticação. Depois de instalar npm, `uv run --locked python scripts/check.py` roda os testes Python e React. Para testar só a interface, use `npm test --prefix frontend -- --run`.
 
 ## Sua rotina em cada checkpoint
 
 1. Leia o documento do checkpoint atual.
-2. Rode `python scripts/check.py` para ver o que falta.
+2. Rode `uv run --locked python scripts/check.py` para ver o que falta.
 3. Implemente a funcionalidade e rode os testes novamente.
 4. Faça commit e push na branch `aluno`:
 
@@ -120,7 +108,7 @@ Se um comando parar por conflito ou porque `main` não pode avançar diretamente
 
 ## Uso de IA
 
-Você pode pedir a uma IA para explicar o código, sugerir um plano, implementar, testar e revisar. Leia as mudanças, execute `python scripts/check.py` e certifique-se de que consegue explicar o fluxo. `AGENTS.md` e `CLAUDE.md` orientam agentes que trabalham neste repositório. Os testes, seed e workflow são parte do enunciado: se parecerem errados, mostre o caso ao professor ou monitor.
+Você pode pedir a uma IA para explicar o código, sugerir um plano, implementar, testar e revisar. Leia as mudanças, execute `uv run --locked python scripts/check.py` e certifique-se de que consegue explicar o fluxo. `AGENTS.md` e `CLAUDE.md` orientam agentes que trabalham neste repositório. Os testes, seed e workflow são parte do enunciado: se parecerem errados, mostre o caso ao professor ou monitor.
 
 ## Como pedir ajuda
 

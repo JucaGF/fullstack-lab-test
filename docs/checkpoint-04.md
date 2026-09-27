@@ -31,12 +31,12 @@ Exemplo: um evento com `available_slots: 2` aparece com **2 vagas disponíveis**
 
 ## Caminho sugerido
 
-1. Instale as dependências com `npm ci --prefix frontend` e rode `python scripts/check.py` para ver as falhas novas.
+1. Instale as dependências com `npm ci --prefix frontend` e rode `uv run --locked python scripts/check.py` para ver as falhas novas.
 2. Use `useEffect` para carregar eventos e `useState` para guardar lista, carregamento e erro. Substitua o cartão fictício por um `map`.
 3. Ligue o botão a `register(id, userId)` e guarde qual evento está enviando. Evite uma segunda chamada enquanto a primeira está pendente.
 4. Após sucesso, chame `listEvents()` de novo antes de mostrar a nova quantidade de vagas.
-5. Rode `python -m database.seed`, inicie backend e frontend em terminais separados e tente se inscrever no navegador.
-6. Rode `python scripts/check.py`, faça commit e push em `aluno`, confira o Actions.
+5. Rode `uv run --locked python -m database.seed`, inicie backend e frontend em terminais separados e tente se inscrever no navegador.
+6. Rode `uv run --locked python scripts/check.py`, faça commit e push em `aluno`, confira o Actions.
 
 ## Dicas graduais
 
@@ -60,4 +60,4 @@ Chame `listEvents()` depois de `register(...)` e substitua a lista pelo resultad
 
 ## Conclusão
 
-Os testes Python e React passam com `python scripts/check.py`, o Actions do seu fork está verde no último commit de `aluno`, e você consegue explicar o percurso clique → chamada HTTP → regra do backend → banco → nova resposta → tela.
+Os testes Python e React passam com `uv run --locked python scripts/check.py`, o Actions do seu fork está verde no último commit de `aluno`, e você consegue explicar o percurso clique → chamada HTTP → regra do backend → banco → nova resposta → tela.
